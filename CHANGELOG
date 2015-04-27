@@ -1,0 +1,11 @@
+#####April 27th, 2015
+- Initial Commit
+- Added glitches:
+	- Wall Glitch
+	- Sticky ceiling Glitch
+	- Multiple jump glitch
+	- High Jump Glitch
+- Partially implemented glitches:
+	- Invincibility Glitch
+	- Permanent Bodies Glitch
+- Implemented spike obstacles in the game
