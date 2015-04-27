@@ -21,7 +21,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 #--------------------------------------------------
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
-glitches={"WallClimb":False,"StickyCeil":False}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":True}
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -49,7 +49,7 @@ class Player(pygame.sprite.Sprite):
         self.image.fill((255,255,255))          #Colore Bianco
         self.rect=self.image.get_rect()
         self.rect.x=20
-        self.rect.y=20
+        self.rect.y=30
         todraw.add(self)
     def update(self):
         self.rect.x+=self.move_x                #Muovi orizzontalmente
@@ -145,9 +145,16 @@ while True:
             exit()      #Esci
         if event.type==KEYDOWN: #Viene premuto un tasto
             if event.key==K_UP:   #Freccia Su
-                if player.onground:   #Salta solo se il giocatore è a terra
-                    player.move_y=-9        #Salta
-                    player.onground=False   #Il giocatore non è più a terra
+                if glitches["MultiJump"]:
+                    player.move_y=-9
+                    player.onground=False
+                else:
+                   if player.onground:   #Salta solo se il giocatore è a terra
+                        if glitches["HighJump"]:
+                           player.move_y=-18
+                        else:
+                            player.move_y=-9        #Salta
+                        player.onground=False   #Il giocatore non è più a terra
             if event.key==K_LEFT: #Freccia Sinistra
                 player.move_x=-5        #Muovi a sinistra
             if event.key==K_RIGHT:   #Freccia Destra
