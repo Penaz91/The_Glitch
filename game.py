@@ -21,7 +21,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 #--------------------------------------------------
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
-glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":True}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False}
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -29,14 +29,21 @@ class Platform(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)     #Inizializzo la superclasse Sprite
         self.image=pygame.Surface((20,20))      #L'immagine è un quadrato 20x20px
-        self.image.fill((255,0,0))              #Il colore è rosso
+        self.image.fill((0,255,0))              #Il colore è rosso
         self.rect=self.image.get_rect()         #Ricavo il rect per le collisioni
         self.rect.x=x                           #Posizionamento orizzontale
         self.rect.y=y                           #Posizionamento verticale
         plats.add(self)                         #Aggiungo al gruppo piattaforme
     def update(self):
         screen.blit(self.image, (self.rect.x, self.rect.y))     #Stampa su schermo l'immagine della piattaforma
-#--------------------------------------------------
+#--------------------------------------------------v
+# Classe spike
+#--------------------------------------------------v
+class Spike(Platform):
+    def __init__(self,x,y):
+        Platform.__init__(self,x,y)
+        self.image.fill((255,0,0))
+#--------------------------------------------------v
 # Classe giocatore
 #--------------------------------------------------
 class Player(pygame.sprite.Sprite):
@@ -95,6 +102,14 @@ def ycoll():
             if player.move_y>0:         #Se mi muovo verso il basso (sto cadendo)
                 player.rect.bottom=block.rect.top       #La parte inferiore del giocatore corrisponderà a quella superiore del blocco
                 player.onground=True                    #Il giocatore poggia su una superficie
+            if isinstance(block,Spike):
+                if glitches["Invincibility"]:
+                    pass
+                else:
+                    if glitches["PermBodies"]:
+                        #TODO: Code the permanent bodies glitch
+                    #Player death
+                    #TODO: Code the player death
 #--------------------------------------------------
 # Costruzione del livello
 #--------------------------------------------------
@@ -113,13 +128,15 @@ def build():
             '#                      ####',
             '#   ##            ##      #',
             '#  ####      #########    #',
-            '###########################']      #Lo schema del livello
+            '#########^^################']      #Lo schema del livello
     for r in level:         #Per ogni riga
         for c in r:         #Per ogni carattere nella riga
             if c==' ':      #Se è uno spazio
                 pass        #Non faccio nulla
             elif c=='#':        #Se è un #
                 p=Platform(myx,myy)     #Creo una piattaforma 20x20 nella posizione myx,myy
+            elif c=="^":
+                p=Spike(myx,myy)
             myx+=20         #Vado a destra di 20px
         myy+=20             #Vado giù di 20px
         myx=0           #Resetto myx
