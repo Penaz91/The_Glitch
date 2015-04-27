@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #--------------------------------------------------
 # S1mplePlatformer
 # Un semplice platform game privo di scorrimento
@@ -108,6 +109,7 @@ def ycoll():
                 else:
                     if glitches["PermBodies"]:
                         #TODO: Code the permanent bodies glitch
+                        pass
                     #Player death
                     #TODO: Code the player death
 #--------------------------------------------------
