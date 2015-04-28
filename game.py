@@ -22,7 +22,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 #--------------------------------------------------
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
-glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":True}
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -66,6 +66,21 @@ class Player(pygame.sprite.Sprite):
         ycoll()                                 #Controlla le collisioni sopra/sotto
         #Le 4 operazioni precedenti vanno fatte in quest'ordine altrimenti potrebbero esserci dei problemi di movimento
         screen.blit(self.image, (self.rect.x, self.rect.y))
+#--------------------------------------------------
+# Classe Cadavere, per il PermBody Glitch
+#--------------------------------------------------
+class PlayerBody(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.Surface((10,10))
+        self.image.fill((200,200,200))
+        self.rect=self.image.get_rect()
+        self.rect.x=x
+        self.rect.y=y
+        todraw.add(self)
+        plats.add(self)
+    def update(self):
+        screen.blit(self.image,(self.rect.x,self.rect.y))
 #----------------------------------------------------------------------------------------------------
 # Le collisioni vengono controllate separatamente per ogni asse, altrimenti
 # potrebbero esserci degli strani "teletrasporti"
@@ -107,11 +122,16 @@ def ycoll():
                 if glitches["Invincibility"]:
                     pass
                 else:
-                    if glitches["PermBodies"]:
-                        #TODO: Code the permanent bodies glitch
-                        pass
-                    #Player death
-                    #TODO: Code the player death
+                    playerDeath(glitches["PermBodies"])
+#--------------------------------------------------
+# Morte del giocatore
+#--------------------------------------------------
+def playerDeath(perm):
+    global player
+    if perm:
+        PlayerBody(player.rect.x,player.rect.y)
+    player.kill()
+    player=Player()
 #--------------------------------------------------
 # Costruzione del livello
 #--------------------------------------------------

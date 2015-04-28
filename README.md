@@ -6,10 +6,11 @@ A little platform game where you have to use some (volountarily inserted) glitch
 - Wall Climb Glitch: if you collide with a wall and keep colliding, you'll find yourself climbing the wall
 - Multiple jump Glitch: you can jump countless times in the air.
 - High Jump Glitch: Each jump is twice as high
-
-###Glitches partially implemented so far:
 - Invincibility Glitch: you don't die to obstacles.
 - Dead bodies Glitch: when you die your dead body won't despawn and you can use it as a platform.
+
+###Glitches partially implemented so far:
+None
 
 ###Glitches planned (not necessarily will be included):
 - Ledge Glitch: if you go over a ledge, you don't fall. In order to fall you need to jump.
