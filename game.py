@@ -22,7 +22,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 #--------------------------------------------------
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
-glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":True}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False}
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -121,6 +121,12 @@ def ycoll():
             if isinstance(block,Spike):
                 if glitches["Invincibility"]:
                     pass
+                elif glitches["BouncySpikes"]:
+                    player.rect.bottom=block.rect.top-1
+                    if glitches["HighJump"]:
+                        player.move_y=-18
+                    else:
+                        player.move_y=-9
                 else:
                     playerDeath(glitches["PermBodies"])
 #--------------------------------------------------
@@ -167,7 +173,10 @@ def build():
 #--------------------------------------------------
 def gravity():
     if not player.onground:     #Se il giocatore sta cadendo (non è a terra)
-        player.move_y+=0.9          #Muovi il giocatore verso il basso
+        if glitches["FeatherFall"]:
+            player.move_y+=0.4
+        else:
+            player.move_y+=0.9          #Muovi il giocatore verso il basso
 player=Player()     #Nuova istanza del giocatore
 build()         #Costruisci il livello
 #--------------------------------------------------

@@ -8,6 +8,8 @@ A little platform game where you have to use some (volountarily inserted) glitch
 - High Jump Glitch: Each jump is twice as high
 - Invincibility Glitch: you don't die to obstacles.
 - Dead bodies Glitch: when you die your dead body won't despawn and you can use it as a platform.
+- Bouncy Spikes glitch: Spikes don't kill you, they make you bounce
+- Feather Falling glitch: You fall at half the normal speed
 
 ###Glitches partially implemented so far:
 None
