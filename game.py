@@ -22,7 +22,8 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 #--------------------------------------------------
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
-glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":True}
+hovervalue=False
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -196,6 +197,9 @@ while True:
                 if glitches["MultiJump"]:
                     player.move_y=-9
                     player.onground=False
+                elif glitches["Hover"]:
+                    hovervalue=True
+                    player.onground=False
                 else:
                    if player.onground:   #Salta solo se il giocatore è a terra
                         if glitches["HighJump"]:
@@ -211,10 +215,15 @@ while True:
                 if glitches["StickyCeil"]:  #Sticky Ceiling Glitch
                     player.move_y=0
         if event.type==KEYUP:  #Viene rilasciato un tasto
+            if event.key==K_UP:
+                if glitches["Hover"]:
+                    hovervalue=False
             if event.key==K_LEFT:   #Freccia Sinistra
                 player.move_x=0     #Interrompi il movimento orizzontale
             if event.key==K_RIGHT:  #Freccia Destra
                 player.move_x=0     #Interrompi il movimento orizzontale
+    if hovervalue:
+        player.move_y-=1.5
     todraw.update()     #Aggiorna lo stato delle sprites da disegnare
     plats.update()      #Aggiorna lo stato delle piattaforme
     pygame.display.update()     #Aggiorna il display

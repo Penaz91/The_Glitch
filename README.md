@@ -10,6 +10,7 @@ A little platform game where you have to use some (volountarily inserted) glitch
 - Dead bodies Glitch: when you die your dead body won't despawn and you can use it as a platform.
 - Bouncy Spikes glitch: Spikes don't kill you, they make you bounce
 - Feather Falling glitch: You fall at half the normal speed
+- Hovering glitch: If you keep the jump button pressed you'll keep going up, like you were flying.
 
 ###Glitches partially implemented so far:
 None
@@ -20,4 +21,3 @@ None
 - Invert-o-glitch (couldn't find a better name yet): Ground kills you, obstacles don't.
 - Clipping glitch: You can glitch through certain walls
 - Clip-on-command glitch: Pressing down arrow makes you go through the platform you're standing on
-- Hovering glitch: If you keep the jump button pressed you'll keep going up, like you were flying.
