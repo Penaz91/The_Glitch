@@ -1,11 +1,13 @@
 #####April 29th, 2015
 - Glitches Completely implemented:
 	- Hovering Glitch
+
 #####April 28th, 2015
 - Coded player death
 - Glitches Completely implemented:
 	- Invincibility glitch
 	- Permanent Bodies Glitch
+
 #####April 27th, 2015
 - Initial Commit
 - Added glitches:
