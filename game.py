@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #--------------------------------------------------
-# S1mplePlatformer
+# The Glitch
 # Un semplice platform game privo di scorrimento
+# Glitchato alla follia
 # By Penaz
 #--------------------------------------------------
 #Imports
