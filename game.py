@@ -11,6 +11,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+import pickle
 #--------------------------------------------------
 #Inizializziamo Pygame, schermo, clock e titolo della finestra
 #--------------------------------------------------
@@ -24,6 +25,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
 glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":True}
+level=""
 hovervalue=False
 #--------------------------------------------------
 # Classe piattaforma
@@ -141,6 +143,14 @@ def playerDeath(perm):
     player.kill()
     player=Player()
 #--------------------------------------------------
+# Carica livello da file
+#--------------------------------------------------
+def load(filename):
+    with open(filename+".lvl",'rb') as f:
+        global level
+        global glitches
+        level, glitches = pickle.load(f)
+#--------------------------------------------------
 # Costruzione del livello
 #--------------------------------------------------
 def build():
@@ -151,14 +161,16 @@ def build():
     #----------------------------------------------------------------------------------------------------
     myx=0
     myy=0
-    level=[
-            '###########################',
-            '#             #           #',
-            '#            #######      #',
-            '#                      ####',
-            '#   ##            ##      #',
-            '#  ####      #########    #',
-            '#########^^################']      #Lo schema del livello
+    #level=[
+            #'###########################',
+            #'#             #           #',
+            #'#            #######      #',
+            #'#                      ####',
+            #'#   ##            ##      #',
+            #'#  ####      #########    #',
+            #'#########^^################']      #Lo schema del livello
+    #with open("test.lvl",'wb') as f:
+        #pickle.dump([level,glitches],f)
     for r in level:         #Per ogni riga
         for c in r:         #Per ogni carattere nella riga
             if c==' ':      #Se è uno spazio
@@ -180,6 +192,7 @@ def gravity():
         else:
             player.move_y+=0.9          #Muovi il giocatore verso il basso
 player=Player()     #Nuova istanza del giocatore
+load("test")
 build()         #Costruisci il livello
 #--------------------------------------------------
 #Ciclo di gioco
