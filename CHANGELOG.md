@@ -1,6 +1,6 @@
 #####May 11th, 2015
-- Added Entrance doors (Working)
-- Added Exit doors (90% Implemented)
+- Added Entrance doors
+- Added Exit doors
 - Planned Help feature
 - Planned "Solid Help Glitch"
 

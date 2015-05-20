@@ -25,7 +25,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
 doors=pygame.sprite.Group()             #Gruppo porte
-glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":True}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":True,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":False}
 level=""
 hovervalue=False
 Entrance=None
@@ -82,7 +82,10 @@ class ExitDoor(pygame.sprite.Sprite):
 def doorcollide():
     collision=pygame.sprite.spritecollide(player,doors,False)
     if collision:
-        pass        #No-op
+        plats.empty()
+        todraw.empty()
+        doors.empty()
+        initgame("test2")
 #--------------------------------------------------
 # Classe giocatore
 #--------------------------------------------------
@@ -186,6 +189,18 @@ def load(filename):
         global glitches
         level, glitches = pickle.load(f)
 #--------------------------------------------------
+# Inizializzazione del gioco
+#--------------------------------------------------
+def initgame(levelname):
+    global player
+    global doors
+    global plats
+    global level
+    global glitches
+    load(levelname)
+    build()         #Costruisci il livello
+    player=Player()     #Nuova istanza del giocatore
+#--------------------------------------------------
 # Costruzione del livello
 #--------------------------------------------------
 def build():
@@ -196,16 +211,16 @@ def build():
     #----------------------------------------------------------------------------------------------------
     myx=0
     myy=0
-    level=[
-            '###########################',
-            '#E            #           #',
-            '#            #######     X#',
-            '#                      ####',
-            '#   ##            ##      #',
-            '#  ####      #########    #',
-            '#########^^################']      #Lo schema del livello
-    with open("test.lvl",'wb') as f:
-        pickle.dump([level,glitches],f)
+    #level[
+            #'###########################',
+            #'#E            #           #',
+            #'#            #######     X#',
+            #'#                      ^###',
+            #'#   #^        #   ##      #',
+            #'#  ####      ### #####    #',
+            #'#########^^################']      #Lo schema del livello
+    #with open("test2.lvl",'wb') as f:
+        #pickle.dump([level,glitches],f)
     for r in level:         #Per ogni riga
         for c in r:         #Per ogni carattere nella riga
             global Entrance
@@ -231,9 +246,7 @@ def gravity():
             player.move_y+=0.4
         else:
             player.move_y+=0.9          #Muovi il giocatore verso il basso
-load("test")
-build()         #Costruisci il livello
-player=Player()     #Nuova istanza del giocatore
+initgame("test")
 #--------------------------------------------------
 #Ciclo di gioco
 #--------------------------------------------------
