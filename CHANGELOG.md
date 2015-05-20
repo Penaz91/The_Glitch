@@ -1,3 +1,9 @@
+#####May 11th, 2015
+- Added Entrance doors (Working)
+- Added Exit doors (90% Implemented)
+- Planned Help feature
+- Planned "Solid Help Glitch"
+
 #####May 10th, 2015
 - Added level loading from file feature
 

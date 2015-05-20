@@ -24,9 +24,11 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 #--------------------------------------------------
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
+doors=pygame.sprite.Group()             #Gruppo porte
 glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":True}
 level=""
 hovervalue=False
+Entrance=None
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -41,14 +43,47 @@ class Platform(pygame.sprite.Sprite):
         plats.add(self)                         #Aggiungo al gruppo piattaforme
     def update(self):
         screen.blit(self.image, (self.rect.x, self.rect.y))     #Stampa su schermo l'immagine della piattaforma
-#--------------------------------------------------v
+#--------------------------------------------------
 # Classe spike
-#--------------------------------------------------v
+#--------------------------------------------------
 class Spike(Platform):
     def __init__(self,x,y):
         Platform.__init__(self,x,y)
         self.image.fill((255,0,0))
-#--------------------------------------------------v
+#--------------------------------------------------
+# Classe EntranceDoor
+#--------------------------------------------------
+class EntranceDoor(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.Surface((20,20))
+        self.image.fill((255,194,0))
+        self.rect=self.image.get_rect()
+        self.rect.x=x
+        self.rect.y=y
+        todraw.add(self)
+    def update(self):
+        screen.blit(self.image, (self.rect.x,self.rect.y))
+#--------------------------------------------------
+# Classe ExitDoor
+#--------------------------------------------------
+class ExitDoor(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.Surface((20,20))
+        self.image.fill((0,79,192))
+        self.rect=self.image.get_rect()
+        self.rect.x=x
+        self.rect.y=y
+        todraw.add(self)
+        doors.add(self)
+    def update(self):
+        screen.blit(self.image, (self.rect.x,self.rect.y))
+def doorcollide():
+    collision=pygame.sprite.spritecollide(player,doors,False)
+    if collision:
+        pass        #No-op
+#--------------------------------------------------
 # Classe giocatore
 #--------------------------------------------------
 class Player(pygame.sprite.Sprite):
@@ -60,8 +95,8 @@ class Player(pygame.sprite.Sprite):
         self.image=pygame.Surface((10,10))      #È un quadrato 10x10px
         self.image.fill((255,255,255))          #Colore Bianco
         self.rect=self.image.get_rect()
-        self.rect.x=20
-        self.rect.y=30
+        self.rect.x=Entrance.rect.x
+        self.rect.y=Entrance.rect.y
         todraw.add(self)
     def update(self):
         self.rect.x+=self.move_x                #Muovi orizzontalmente
@@ -161,20 +196,25 @@ def build():
     #----------------------------------------------------------------------------------------------------
     myx=0
     myy=0
-    #level=[
-            #'###########################',
-            #'#             #           #',
-            #'#            #######      #',
-            #'#                      ####',
-            #'#   ##            ##      #',
-            #'#  ####      #########    #',
-            #'#########^^################']      #Lo schema del livello
-    #with open("test.lvl",'wb') as f:
-        #pickle.dump([level,glitches],f)
+    level=[
+            '###########################',
+            '#E            #           #',
+            '#            #######     X#',
+            '#                      ####',
+            '#   ##            ##      #',
+            '#  ####      #########    #',
+            '#########^^################']      #Lo schema del livello
+    with open("test.lvl",'wb') as f:
+        pickle.dump([level,glitches],f)
     for r in level:         #Per ogni riga
         for c in r:         #Per ogni carattere nella riga
+            global Entrance
             if c==' ':      #Se è uno spazio
                 pass        #Non faccio nulla
+            elif c=="E":
+                Entrance=EntranceDoor(myx,myy)
+            elif c=="X":
+                p=ExitDoor(myx,myy)
             elif c=='#':        #Se è un #
                 p=Platform(myx,myy)     #Creo una piattaforma 20x20 nella posizione myx,myy
             elif c=="^":
@@ -191,9 +231,9 @@ def gravity():
             player.move_y+=0.4
         else:
             player.move_y+=0.9          #Muovi il giocatore verso il basso
-player=Player()     #Nuova istanza del giocatore
 load("test")
 build()         #Costruisci il livello
+player=Player()     #Nuova istanza del giocatore
 #--------------------------------------------------
 #Ciclo di gioco
 #--------------------------------------------------
@@ -238,6 +278,7 @@ while True:
                 player.move_x=0     #Interrompi il movimento orizzontale
     if hovervalue:
         player.move_y-=1.5
+    doorcollide()
     todraw.update()     #Aggiorna lo stato delle sprites da disegnare
     plats.update()      #Aggiorna lo stato delle piattaforme
     pygame.display.update()     #Aggiorna il display
