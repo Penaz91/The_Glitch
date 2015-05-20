@@ -22,3 +22,8 @@ None
 - Clipping glitch: You can glitch through certain walls
 - Clip-on-command glitch: Pressing down arrow makes you go through the platform you're standing on
 - Solid Help Glitch: The help text will behave like a temporary platform
+
+###Features Planned:
+- Help text in-game
+- Menu
+- Campaign support
