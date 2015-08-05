@@ -25,10 +25,11 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
 doors=pygame.sprite.Group()             #Gruppo porte
-glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":True,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":False}
+glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":False}
 level=""
 hovervalue=False
 Entrance=None
+helptext=pygame.font.SysFont("Arial",10)
 #--------------------------------------------------
 # Classe piattaforma
 #--------------------------------------------------
@@ -65,6 +66,20 @@ class EntranceDoor(pygame.sprite.Sprite):
     def update(self):
         screen.blit(self.image, (self.rect.x,self.rect.y))
 #--------------------------------------------------
+# Classe helpsign
+#--------------------------------------------------
+class helpsign(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image=pygame.Surface((20,20))
+        self.image.fill((149,0,109))
+        self.rect=self.image.get_rect()
+        self.rect.x=x
+        self.rect.y=y
+        todraw.add(self)
+    def update(self):
+        screen.blit(self.image, (self.rect.x,self.rect.y))
+#--------------------------------------------------
 # Classe ExitDoor
 #--------------------------------------------------
 class ExitDoor(pygame.sprite.Sprite):
@@ -79,6 +94,9 @@ class ExitDoor(pygame.sprite.Sprite):
         doors.add(self)
     def update(self):
         screen.blit(self.image, (self.rect.x,self.rect.y))
+#--------------------------------------------------
+# Collisione porte
+#--------------------------------------------------
 def doorcollide():
     collision=pygame.sprite.spritecollide(player,doors,False)
     if collision:
@@ -86,6 +104,13 @@ def doorcollide():
         todraw.empty()
         doors.empty()
         initgame("test2")
+#--------------------------------------------------
+# Collisione cartelli
+#--------------------------------------------------
+def signcollide():
+    collision=pygame.sprite.spritecollide(player,signs,False)
+    for block in collision:
+        pass
 #--------------------------------------------------
 # Classe giocatore
 #--------------------------------------------------
@@ -197,7 +222,7 @@ def initgame(levelname):
     global plats
     global level
     global glitches
-    load(levelname)
+    #load(levelname)
     build()         #Costruisci il livello
     player=Player()     #Nuova istanza del giocatore
 #--------------------------------------------------
@@ -211,16 +236,20 @@ def build():
     #----------------------------------------------------------------------------------------------------
     myx=0
     myy=0
-    #level[
-            #'###########################',
-            #'#E            #           #',
-            #'#            #######     X#',
-            #'#                      ^###',
-            #'#   #^        #   ##      #',
-            #'#  ####      ### #####    #',
-            #'#########^^################']      #Lo schema del livello
-    #with open("test2.lvl",'wb') as f:
-        #pickle.dump([level,glitches],f)
+    level=[
+            '################################',
+            '#E            #                #',
+            '#            #######          X#',
+            '#                           ^###',
+            '#                              #',
+            '#                              #',
+            '#                              #',
+            '#                  H           #',
+            '#   #^        #   ##           #',
+            '#  ####      ### #####         #',
+            '#########^^#####################']      #Lo schema del livello
+    with open("test2.lvl",'wb') as f:
+        pickle.dump([level,glitches],f)
     for r in level:         #Per ogni riga
         for c in r:         #Per ogni carattere nella riga
             global Entrance
@@ -230,6 +259,8 @@ def build():
                 Entrance=EntranceDoor(myx,myy)
             elif c=="X":
                 p=ExitDoor(myx,myy)
+            elif c=="H":
+                p=helpsign(myx,myy)
             elif c=='#':        #Se è un #
                 p=Platform(myx,myy)     #Creo una piattaforma 20x20 nella posizione myx,myy
             elif c=="^":
