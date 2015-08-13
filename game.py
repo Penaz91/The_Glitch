@@ -25,6 +25,7 @@ clock=pygame.time.Clock()           #Il clock serve per evitare differenze prest
 todraw=pygame.sprite.Group()            #Gruppo di sprite da disegnare
 plats=pygame.sprite.Group()             #Gruppo di piattaforme
 doors=pygame.sprite.Group()             #Gruppo porte
+signs=pygame.sprite.Group()             #Gruppo helpsigns
 glitches={"WallClimb":False,"StickyCeil":False,"MultiJump":False,"HighJump":False,"Invincibility":False,"PermBodies":False,"FeatherFall":False,"BouncySpikes":False,"Hover":False}
 level=""
 hovervalue=False
@@ -69,14 +70,17 @@ class EntranceDoor(pygame.sprite.Sprite):
 # Classe helpsign
 #--------------------------------------------------
 class helpsign(pygame.sprite.Sprite):
-    def __init__(self,x,y):
+    text=""
+    def __init__(self,x,y,txt):
         pygame.sprite.Sprite.__init__(self)
         self.image=pygame.Surface((20,20))
         self.image.fill((149,0,109))
         self.rect=self.image.get_rect()
         self.rect.x=x
         self.rect.y=y
+        self.text=txt
         todraw.add(self)
+        signs.add(self)
     def update(self):
         screen.blit(self.image, (self.rect.x,self.rect.y))
 #--------------------------------------------------
@@ -110,7 +114,8 @@ def doorcollide():
 def signcollide():
     collision=pygame.sprite.spritecollide(player,signs,False)
     for block in collision:
-        pass
+        ht=helptext.render(collision[0].text,True,(255,0,255),None)
+        screen.blit(ht, (player.rect.x,player.rect.y-30))
 #--------------------------------------------------
 # Classe giocatore
 #--------------------------------------------------
@@ -260,7 +265,7 @@ def build():
             elif c=="X":
                 p=ExitDoor(myx,myy)
             elif c=="H":
-                p=helpsign(myx,myy)
+                p=helpsign(myx,myy,"Test")
             elif c=='#':        #Se è un #
                 p=Platform(myx,myy)     #Creo una piattaforma 20x20 nella posizione myx,myy
             elif c=="^":
@@ -323,6 +328,7 @@ while True:
     if hovervalue:
         player.move_y-=1.5
     doorcollide()
+    signcollide()
     todraw.update()     #Aggiorna lo stato delle sprites da disegnare
     plats.update()      #Aggiorna lo stato delle piattaforme
     pygame.display.update()     #Aggiorna il display
