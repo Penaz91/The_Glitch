@@ -1,4 +1,8 @@
 # The Glitch
+
+## This project is abandoned in favor of a full rewrite
+## This repository is kept only for historical purposes
+
 A little platform game where you have to use some (volountarily inserted) glitches to get to the next level, but be careful! Sometimes glitches are against you too
 
 ###Glitches completely implemented so far:
